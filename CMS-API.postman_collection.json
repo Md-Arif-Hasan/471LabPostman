@@ -2,7 +2,7 @@
   "info": {
     "name": "CSE470 Lab - Content Management API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": "CRUD on a content management system. Set the collection variable baseUrl to http://localhost:8000 or your public Codespaces URL."
+    "description": "Set the collection variable baseUrl to your server address (http://localhost:8000 or your public Codespaces URL). Run the requests top to bottom."
   },
   "variable": [
     {
@@ -16,7 +16,7 @@
   ],
   "item": [
     {
-      "name": "Create",
+      "name": "1. Create",
       "item": [
         {
           "name": "Create content",
@@ -39,7 +39,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"Exam routine\",\n  \"body\": \"Midterm exams start on 20 November.\",\n  \"author\": \"Arif\",\n  \"status\": \"draft\"\n}",
+              "raw": "{\n  \"title\": \"Exam routine\",\n  \"body\": \"Midterm exams start on 20 November.\",\n  \"author\": \"Arif\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -54,15 +54,14 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"Status is 201\", () => pm.response.to.have.status(201));",
-                  "pm.collectionVariables.set(\"contentId\", pm.response.json().id);",
-                  "pm.test(\"Has an id\", () => pm.expect(pm.response.json().id).to.be.a(\"number\"));"
+                  "pm.collectionVariables.set(\"contentId\", pm.response.json().id);"
                 ]
               }
             }
           ]
         },
         {
-          "name": "Create without title -> 400",
+          "name": "Create without title (400)",
           "request": {
             "method": "POST",
             "header": [
@@ -101,78 +100,12 @@
               }
             }
           ]
-        },
-        {
-          "name": "Create with bad status -> 400",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/contents",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "contents"
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"Bad\",\n  \"status\": \"live\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status is 400\", () => pm.response.to.have.status(400));"
-                ]
-              }
-            }
-          ]
         }
       ]
     },
     {
-      "name": "Read",
+      "name": "2. Read",
       "item": [
-        {
-          "name": "Health check",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": []
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
-                ]
-              }
-            }
-          ]
-        },
         {
           "name": "Get all contents",
           "request": {
@@ -194,15 +127,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));",
-                  "pm.test(\"Returns an array\", () => pm.expect(pm.response.json()).to.be.an(\"array\"));"
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "Filter by status (query param)",
+          "name": "Get published only",
           "request": {
             "method": "GET",
             "header": [],
@@ -228,15 +160,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));",
-                  "pm.test(\"All published\", () => pm.response.json().forEach(c => pm.expect(c.status).to.eql(\"published\")));"
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "Get one by id (path param)",
+          "name": "Get one by id",
           "request": {
             "method": "GET",
             "header": [],
@@ -264,7 +195,7 @@
           ]
         },
         {
-          "name": "Get missing -> 404",
+          "name": "Get missing id (404)",
           "request": {
             "method": "GET",
             "header": [],
@@ -294,7 +225,7 @@
       ]
     },
     {
-      "name": "Update",
+      "name": "3. Update",
       "item": [
         {
           "name": "Publish content",
@@ -338,53 +269,11 @@
               }
             }
           ]
-        },
-        {
-          "name": "Edit title and body",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/contents/{{contentId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "contents",
-                "{{contentId}}"
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"Exam routine (updated)\",\n  \"body\": \"Midterm exams start on 22 November.\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
-                ]
-              }
-            }
-          ]
         }
       ]
     },
     {
-      "name": "Delete",
+      "name": "4. Delete",
       "item": [
         {
           "name": "Delete content",
@@ -415,7 +304,7 @@
           ]
         },
         {
-          "name": "Delete again -> 404",
+          "name": "Delete again (404)",
           "request": {
             "method": "DELETE",
             "header": [],

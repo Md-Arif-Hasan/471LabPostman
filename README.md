@@ -1,34 +1,26 @@
 # Content Management API — CSE470 Lab 04
 
-A small Express.js CRUD API for a content management system (posts/articles),
-for practising Postman. Based on AsifHasanChowdhury/Express-JS, reworked so it
-runs **without MySQL/XAMPP**.
+A small CRUD API built with Express.js, tested with Postman.
 
-## Run in GitHub Codespaces (nothing to install on the lab PC)
-1. Open the repo in a Codespace. In the terminal: `npm install` then `npm start`
-2. Ports tab → port 8000 → Port Visibility → **Public**. Copy the address.
-3. Postman web (web.postman.co) or hoppscotch.io → Import
-   `CMS-API.postman_collection.json` → set the collection variable `baseUrl`
-   to the public address → Run.
-
-## Run locally
-    npm install
-    npm start          # http://localhost:8000
+## Run
+```bash
+npm install
+npm start          # http://localhost:8000
+```
+In Codespaces: Ports tab → port 8000 → Port Visibility → **Public**.
 
 ## Files
-- `bll.js` — routes (the API)
-- `db.js` — in-memory data layer (default)
-- `index.js` + `schema.sql` — MySQL data layer; switch the import in bll.js
-  to './index.js' and run `npm i mysql2`
+| File | What it does |
+|---|---|
+| `server.js` | The API routes (Create, Read, Update, Delete) |
+| `db.js` | The data, kept in memory (no database needed) |
+| `CMS-API.postman_collection.json` | Ready-made Postman requests. Import it, set `baseUrl` to your server address |
 
-## Content fields
-`id`, `title` (required), `body`, `author`, `status` (draft | published | archived), `createdAt`, `updatedAt`
-
-## Endpoints (CRUD)
-| Operation | Method | Path | Body |
+## Endpoints
+| CRUD | Method | URL | Body |
 |---|---|---|---|
-| Create | POST | /contents | `{"title","body","author","status"}` |
-| Read all | GET | /contents?status=&author= | |
-| Read one | GET | /contents/:id | |
-| Update | PUT | /contents/:id | any of title/body/author/status |
-| Delete | DELETE | /contents/:id | |
+| Create | POST | `/contents` | `{"title": "...", "body": "...", "author": "..."}` |
+| Read all | GET | `/contents` (or `/contents?status=published`) | — |
+| Read one | GET | `/contents/:id` | — |
+| Update | PUT | `/contents/:id` | e.g. `{"status": "published"}` |
+| Delete | DELETE | `/contents/:id` | — |
