@@ -1,0 +1,14 @@
+{
+  "name": "cms-api-lab",
+  "version": "1.0.0",
+  "description": "CSE470 Lab: Express.js API + Postman testing : Content Management CRUD API (no database needed)",
+  "type": "module",
+  "main": "bll.js",
+  "scripts": {
+    "start": "node bll.js",
+    "dev": "node --watch bll.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

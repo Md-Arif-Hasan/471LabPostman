@@ -1,0 +1,9 @@
+{
+  "name": "Express + Postman Lab",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "postCreateCommand": "npm install",
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "8000": { "label": "Express API", "onAutoForward": "notify" }
+  }
+}
